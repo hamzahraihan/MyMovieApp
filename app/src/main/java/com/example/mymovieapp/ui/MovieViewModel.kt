@@ -1,4 +1,6 @@
 package com.example.mymovieapp.ui
 
-class MovieViewModel {
+import androidx.lifecycle.ViewModel
+
+class MovieViewModel : ViewModel() {
 }
