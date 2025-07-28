@@ -1,0 +1,50 @@
+<resources>
+    <string name="app_name">MyMovieApp</string>
+
+    <!-- Movie 1-->
+    <string name="title1">Oppenheimer</string>
+    <string name="description1">
+        Oppenheimer is a 2023 epic biographical thriller film written,
+        co-produced, and directed by Christopher Nolan.
+        It follows the life of J. Robert Oppenheimer, the American theoretical
+        physicist who helped develop the first nuclear weapons during World War II. Based on the 2005
+        biography American Prometheus by Kai Bird and Martin J. Sherwin, the film dramatizes Oppenheimer\'s
+        studies, his direction of the Los Alamos Laboratory and his 1954 security hearing. Cillian Murphy stars as Oppenheimer,
+        alongside Robert Downey Jr. as the United States Atomic Energy
+        Commission member Lewis Strauss. The ensemble supporting cast includes Emily Blunt, Matt Damon,
+        Florence Pugh, Josh Hartnett, Casey Affleck, Rami Malek, and Kenneth Branagh.
+    </string>
+    <string name="category1">History</string>
+    <!-- Movie 2 -->
+    <string name="title2">How to Train Your Dragon</string>
+    <string name="description2">
+       How to Train Your Dragon is a 2025 American fantasy adventure film and a live-action remake
+        of the 2010 animated film, itself loosely based on the 2003 novel by Cressida Cowell.
+        Produced by DreamWorks Animation and Marc Platt Productions, the film was written and directed by Dean DeBlois,
+        who co-wrote and directed the animated films. It stars Mason Thames, Nico Parker,
+        Gabriel Howell, Julian Dennison, Bronwyn James, Harry Trevaldwyn,
+        Peter Serafinowicz, and Nick Frost, with Gerard Butler reprising his role as Stoick
+        the Vast from the animated films.
+    </string>
+    <string name="category2">Animation</string>
+
+    <!-- Movie 3 -->
+    <string name="title3">Blade Runner 2049</string>
+    <string name="description3">
+        Blade Runner 2049 is a 2017 neo-noir science fiction film directed by Denis Villeneuve.
+        A sequel to the 1982 film Blade Runner, it stars Ryan Gosling as "K", a replicant Blade Runner
+        who unearths a secret that could destabilize society. His journey leads him to former Blade Runner Rick Deckard (Harrison Ford).
+        The film explores themes of identity, memory, and the nature of humanity in a visually stunning dystopian future.
+    </string>
+    <string name="category3">Sci-Fi</string>
+
+    <!-- Movie 4 -->
+    <string name="title4">Final Destination: Bloodlines</string>
+    <string name="description4">
+        Final Destination: Bloodlines continues the chilling legacy of the franchise where a group
+        of individuals escapes a deadly event—only to be hunted one by one by death itself.
+        With new characters, intense premonitions, and inventive fatal sequences, this installment
+        delves deeper into the eerie pattern that fate never forgets.
+    </string>
+    <string name="category4">Horror</string>
+</resources>
