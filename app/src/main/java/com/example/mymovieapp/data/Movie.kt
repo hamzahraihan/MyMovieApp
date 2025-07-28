@@ -8,5 +8,6 @@ data class Movie(
     @StringRes val titleRes: Int,
     @StringRes val descriptionRes: Int,
     @StringRes val categoryRes: Int,
-    @DrawableRes val imageRes: Int
+    @DrawableRes val imageRes: Int,
+    val movieType: MovieType
 )
