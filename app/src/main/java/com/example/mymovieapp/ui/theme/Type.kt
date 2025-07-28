@@ -15,6 +15,15 @@ val Inter = FontFamily(
 )
 
 val Typography = Typography(
+    displayLarge = TextStyle(
+        fontFamily = Inter
+    ),
+    displayMedium = TextStyle(
+        fontFamily = Inter
+    ),
+    displaySmall = TextStyle(
+        fontFamily = Inter
+    ),
     bodyLarge = TextStyle(
         fontFamily = Inter,
         fontWeight = FontWeight.Normal,
@@ -22,11 +31,27 @@ val Typography = Typography(
         lineHeight = 24.sp,
         letterSpacing = 0.5.sp
     ),
+    bodySmall = TextStyle(
+        fontFamily = Inter,
+        fontWeight = FontWeight.Normal,
+        fontSize = 12.sp,
+        lineHeight = 16.sp,
+    ),
+    headlineLarge = TextStyle(
+        fontFamily = Inter
+    ),
     titleLarge = TextStyle(
         fontFamily = Inter,
         fontWeight = FontWeight.Normal,
         fontSize = 22.sp,
         lineHeight = 28.sp,
+        letterSpacing = 0.sp
+    ),
+    titleMedium = TextStyle(
+        fontFamily = Inter,
+        fontWeight = FontWeight.Bold,
+        fontSize = 16.sp,
+        lineHeight = 14.sp,
         letterSpacing = 0.sp
     ),
     labelSmall = TextStyle(
