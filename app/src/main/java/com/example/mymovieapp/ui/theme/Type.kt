@@ -16,13 +16,17 @@ val Inter = FontFamily(
 
 val Typography = Typography(
     displayLarge = TextStyle(
-        fontFamily = Inter
+        fontFamily = Inter,
+        fontWeight = FontWeight.Normal,
+        fontSize = 57.sp,
     ),
     displayMedium = TextStyle(
         fontFamily = Inter
     ),
     displaySmall = TextStyle(
-        fontFamily = Inter
+        fontFamily = Inter,
+        fontWeight = FontWeight.Normal,
+        fontSize = 36.sp,
     ),
     bodyLarge = TextStyle(
         fontFamily = Inter,
