@@ -9,4 +9,6 @@ data class MovieUiState(
     val currentMovieType: MovieType = MovieType.POPULAR,
     val currentSelectedMovie: Movie = LocalMovieDataProvider.defaultValue,
     val isShowingHomepage: Boolean = true
-)
+) {
+    val currentTypeOfMovies: List<Movie> by lazy { movies[currentMovieType] ?: emptyList() }
+}
