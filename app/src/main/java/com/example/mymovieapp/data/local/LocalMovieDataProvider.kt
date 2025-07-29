@@ -31,7 +31,7 @@ object LocalMovieDataProvider {
                 descriptionRes = R.string.description3,
                 categoryRes = R.string.category3,
                 imageRes = R.drawable.sciencefic1,
-                movieType = MovieType.POPULAR
+                movieType = MovieType.NOW_PLAYING
             ),
             Movie(
                 id = 3,
@@ -39,7 +39,7 @@ object LocalMovieDataProvider {
                 descriptionRes = R.string.description4,
                 categoryRes = R.string.description4,
                 imageRes = R.drawable.horror1,
-                movieType = MovieType.POPULAR
+                movieType = MovieType.TOP_RATED
             ),
             Movie(
                 id = 0,
