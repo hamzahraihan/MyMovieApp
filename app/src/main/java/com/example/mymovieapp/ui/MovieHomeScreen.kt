@@ -1,12 +1,14 @@
 package com.example.mymovieapp.ui
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.FavoriteBorder
@@ -17,15 +19,30 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.example.mymovieapp.data.Movie
 import com.example.mymovieapp.data.MovieType
 import com.example.mymovieapp.data.local.LocalMovieDataProvider
+import com.example.mymovieapp.util.MovieContentType
+import com.example.mymovieapp.util.MovieNavigationType
+
 
 @Composable
-fun MovieHomeScreen(contentPadding: PaddingValues) {
+fun MovieHomeScreen(
+    navigationType: MovieNavigationType,
+    contentType: MovieContentType,
+    movieUiState: MovieUiState,
+    onTabPressed: (MovieType) -> Unit,
+    onMovieCardPressed: (Movie) -> Unit,
+    onDetailScreenBackPressed: () -> Unit,
+    modifier: Modifier = Modifier
+) {
     val navigationItemContentList = listOf(
         NavigationItemContent(
             movieType = MovieType.POPULAR,
@@ -49,35 +66,59 @@ fun MovieHomeScreen(contentPadding: PaddingValues) {
         )
     )
     MovieAppContent(
+        navigationType = navigationType,
+        contentType = contentType,
+        movieUiState = movieUiState,
+        onTabPressed = onTabPressed,
+        onMovieCardPressed = onMovieCardPressed,
         navigationItemContentList = navigationItemContentList,
-        contentPadding = contentPadding
+        modifier = modifier
     )
 }
 
 @Composable
 private fun MovieAppContent(
+    navigationType: MovieNavigationType,
+    contentType: MovieContentType,
+    movieUiState: MovieUiState,
+    onTabPressed: (MovieType) -> Unit,
+    onMovieCardPressed: (Movie) -> Unit,
     navigationItemContentList: List<NavigationItemContent>,
-    contentPadding: PaddingValues,
     modifier: Modifier = Modifier
 ) {
+    val movies = movieUiState.currentTypeOfMovies
     Box(
         modifier = modifier
-            .padding(top = contentPadding.calculateTopPadding())
     ) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(MaterialTheme.colorScheme.inverseOnSurface)
+                .background(MaterialTheme.colorScheme.inverseOnSurface),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            MovieList(
-                movies = LocalMovieDataProvider.getMovieData(),
-                modifier = Modifier
-                    .weight(1f)
-                    .padding(horizontal = 16.dp)
-                    .padding(top = 40.dp),
-            )
+            if (movies.isNotEmpty()) {
+                MovieList(
+                    movieUiState = movieUiState,
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(horizontal = 16.dp),
+                    onMovieCardPressed = onMovieCardPressed,
+                )
+            }
+            if (movies.isEmpty()) {
+                Box(
+                    modifier = Modifier.weight(1f),
+                    contentAlignment = Alignment.Center,
+                ) {
+                    Text(
+                        text = "there is no movies available",
+                        textAlign = TextAlign.Center
+                    )
+                }
+            }
             MovieNavigationBottomBar(
-                currentTab = MovieType.POPULAR,
+                currentTab = movieUiState.currentMovieType,
+                onTabPressed = onTabPressed,
                 navigationItemContentList = navigationItemContentList,
                 modifier = Modifier.fillMaxWidth()
             )
@@ -90,6 +131,7 @@ private fun MovieAppContent(
 @Composable
 private fun MovieNavigationBottomBar(
     currentTab: MovieType,
+    onTabPressed: (MovieType) -> Unit,
     navigationItemContentList: List<NavigationItemContent>,
     modifier: Modifier
 ) {
@@ -97,7 +139,7 @@ private fun MovieNavigationBottomBar(
         for (navItem in navigationItemContentList) {
             NavigationBarItem(
                 selected = currentTab == navItem.movieType,
-                onClick = {},
+                onClick = { onTabPressed(navItem.movieType) },
                 icon = {
                     Icon(
                         imageVector = navItem.icon,
@@ -106,9 +148,7 @@ private fun MovieNavigationBottomBar(
                 },
             )
         }
-
     }
-
 }
 
 private data class NavigationItemContent(
