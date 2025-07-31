@@ -1,14 +1,15 @@
 package com.example.mymovieapp.ui
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.FavoriteBorder
@@ -19,16 +20,20 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.NavigationDrawerItem
+import androidx.compose.material3.NavigationDrawerItemDefaults
+import androidx.compose.material3.PermanentDrawerSheet
+import androidx.compose.material3.PermanentNavigationDrawer
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.example.mymovieapp.data.Movie
 import com.example.mymovieapp.data.MovieType
-import com.example.mymovieapp.data.local.LocalMovieDataProvider
 import com.example.mymovieapp.util.MovieContentType
 import com.example.mymovieapp.util.MovieNavigationType
 
@@ -65,15 +70,49 @@ fun MovieHomeScreen(
             text = "Upcoming"
         )
     )
-    MovieAppContent(
-        navigationType = navigationType,
-        contentType = contentType,
-        movieUiState = movieUiState,
-        onTabPressed = onTabPressed,
-        onMovieCardPressed = onMovieCardPressed,
-        navigationItemContentList = navigationItemContentList,
-        modifier = modifier
-    )
+    if (navigationType == MovieNavigationType.PERMANENT_NAVIGATION_DRAWER) {
+        PermanentNavigationDrawer(
+            drawerContent = {
+                PermanentDrawerSheet {
+                    NavigationDrawerContent(
+                        selectedDestination = movieUiState.currentMovieType,
+                        onTabPressed = onTabPressed,
+                        navigationItemContentList = navigationItemContentList,
+                        modifier = Modifier
+                            .wrapContentWidth()
+                            .fillMaxHeight()
+                    )
+                }
+            },
+        ) {
+            MovieAppContent(
+                navigationType = navigationType,
+                contentType = contentType,
+                movieUiState = movieUiState,
+                onTabPressed = onTabPressed,
+                onMovieCardPressed = onMovieCardPressed,
+                navigationItemContentList = navigationItemContentList,
+                modifier = modifier
+            )
+        }
+    } else {
+        if (movieUiState.isShowingHomepage) {
+            MovieAppContent(
+                navigationType = navigationType,
+                contentType = contentType,
+                movieUiState = movieUiState,
+                onTabPressed = onTabPressed,
+                onMovieCardPressed = onMovieCardPressed,
+                navigationItemContentList = navigationItemContentList,
+                modifier = modifier
+            )
+        } else {
+            MovieDetailScreen(
+                onBackPressed = onDetailScreenBackPressed,
+                movieUiState = movieUiState,
+            )
+        }
+    }
 }
 
 @Composable
@@ -90,42 +129,78 @@ private fun MovieAppContent(
     Box(
         modifier = modifier
     ) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(MaterialTheme.colorScheme.inverseOnSurface),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            if (movies.isNotEmpty()) {
-                MovieList(
-                    movieUiState = movieUiState,
-                    modifier = Modifier
-                        .weight(1f)
-                        .padding(horizontal = 16.dp),
-                    onMovieCardPressed = onMovieCardPressed,
-                )
-            }
-            if (movies.isEmpty()) {
-                Box(
-                    modifier = Modifier.weight(1f),
-                    contentAlignment = Alignment.Center,
-                ) {
-                    Text(
-                        text = "there is no movies available",
-                        textAlign = TextAlign.Center
+        Row(modifier = Modifier.fillMaxSize()) {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(MaterialTheme.colorScheme.inverseOnSurface),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                if (movies.isNotEmpty()) {
+                    MovieList(
+                        movieUiState = movieUiState,
+                        modifier = Modifier
+                            .weight(1f)
+                            .padding(horizontal = 16.dp),
+                        onMovieCardPressed = onMovieCardPressed,
+                    )
+                }
+                if (movies.isEmpty()) {
+                    Box(
+                        modifier = Modifier.weight(1f),
+                        contentAlignment = Alignment.Center,
+                    ) {
+                        Text(
+                            text = "there is no movies available",
+                            textAlign = TextAlign.Center
+                        )
+                    }
+                }
+                AnimatedVisibility(visible = navigationType == MovieNavigationType.BOTTOM_NAVIGATION) {
+                    MovieNavigationBottomBar(
+                        currentTab = movieUiState.currentMovieType,
+                        onTabPressed = onTabPressed,
+                        navigationItemContentList = navigationItemContentList,
+                        modifier = Modifier.fillMaxWidth()
                     )
                 }
             }
-            MovieNavigationBottomBar(
-                currentTab = movieUiState.currentMovieType,
-                onTabPressed = onTabPressed,
-                navigationItemContentList = navigationItemContentList,
-                modifier = Modifier.fillMaxWidth()
+        }
+    }
+}
+
+@Composable
+private fun NavigationDrawerContent(
+    selectedDestination: MovieType,
+    onTabPressed: (MovieType) -> Unit,
+    navigationItemContentList: List<NavigationItemContent>,
+    modifier: Modifier
+) {
+    Column(modifier = modifier) {
+        for (navItem in navigationItemContentList) {
+            NavigationDrawerItem(
+                selected = selectedDestination == navItem.movieType,
+                label = {
+                    Text(
+                        text = navItem.text,
+                        modifier = Modifier.padding(horizontal = 16.dp)
+                    )
+                },
+                onClick = {
+                    onTabPressed(navItem.movieType)
+                },
+                icon = {
+                    Icon(imageVector = navItem.icon, contentDescription = null)
+
+                },
+                colors = NavigationDrawerItemDefaults.colors(
+                    unselectedContainerColor = Color.Transparent
+                ),
             )
         }
     }
-
 }
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
