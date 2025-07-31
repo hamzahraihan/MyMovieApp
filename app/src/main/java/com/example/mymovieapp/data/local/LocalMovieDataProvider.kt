@@ -42,7 +42,7 @@ object LocalMovieDataProvider {
                 movieType = MovieType.TOP_RATED
             ),
             Movie(
-                id = 0,
+                id = 4,
                 titleRes = R.string.title1,
                 descriptionRes = R.string.description1,
                 categoryRes = R.string.category1,
@@ -50,7 +50,7 @@ object LocalMovieDataProvider {
                 movieType = MovieType.POPULAR
             ),
             Movie(
-                id = 1,
+                id = 5,
                 titleRes = R.string.title2,
                 descriptionRes = R.string.description2,
                 categoryRes = R.string.category2,
@@ -58,7 +58,7 @@ object LocalMovieDataProvider {
                 movieType = MovieType.POPULAR
             ),
             Movie(
-                id = 2,
+                id = 6,
                 titleRes = R.string.title3,
                 descriptionRes = R.string.description3,
                 categoryRes = R.string.category3,
@@ -66,10 +66,10 @@ object LocalMovieDataProvider {
                 movieType = MovieType.POPULAR
             ),
             Movie(
-                id = 3,
+                id = 7,
                 titleRes = R.string.title4,
                 descriptionRes = R.string.description4,
-                categoryRes = R.string.description4,
+                categoryRes = R.string.category4,
                 imageRes = R.drawable.horror1,
                 movieType = MovieType.POPULAR
             )
