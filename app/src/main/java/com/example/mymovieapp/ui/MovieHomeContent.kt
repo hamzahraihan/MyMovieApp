@@ -1,5 +1,7 @@
 package com.example.mymovieapp.ui
 
+import android.app.Activity
+import androidx.activity.compose.LocalActivity
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -13,6 +15,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Card
@@ -23,6 +26,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
@@ -70,6 +74,37 @@ fun MovieList(
 }
 
 @Composable
+fun MovieListAndDetail(
+    movieUiState: MovieUiState,
+    onMovieCardPressed: (Movie) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    val movies = movieUiState.currentTypeOfMovies
+    Row(modifier = modifier, horizontalArrangement = Arrangement.SpaceEvenly) {
+        LazyColumn(
+            contentPadding = WindowInsets.statusBars.asPaddingValues()
+        ) {
+            items(movies, key = { movie ->
+                movie.id
+            }) { movie ->
+                MovieListItem(
+                    movie = movie,
+                    selected = movieUiState.currentSelectedMovie.id == movie.id,
+                    onCardClick = { onMovieCardPressed(movie) },
+                )
+            }
+        }
+        val activity = LocalActivity.current
+        MovieDetailScreen(
+            movieUiState = movieUiState,
+            onBackPressed = {
+                activity?.finish()
+            }
+        )
+    }
+}
+
+@Composable
 private fun MovieListItemImage(@DrawableRes imageRes: Int, modifier: Modifier = Modifier) {
     Box(modifier = modifier) {
         Image(
@@ -91,6 +126,10 @@ private fun MovieListItem(
     Card(
         elevation = CardDefaults.cardElevation(),
         modifier = modifier,
+        colors = CardDefaults.cardColors(
+            containerColor = if (selected) MaterialTheme.colorScheme.primaryContainer
+            else MaterialTheme.colorScheme.secondaryContainer
+        ),
         onClick = onCardClick
     ) {
         Row(
@@ -111,7 +150,7 @@ private fun MovieListItem(
                 Text(
                     text = stringResource(movie.descriptionRes),
                     overflow = TextOverflow.Ellipsis,
-                    maxLines = 3,
+                    maxLines = 2,
                     style = MaterialTheme.typography.bodySmall
                 )
                 Spacer(modifier = Modifier.weight(1f))
