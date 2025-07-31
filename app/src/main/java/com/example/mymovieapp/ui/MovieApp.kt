@@ -72,3 +72,11 @@ fun MovieListPreview() {
         )
     }
 }
+
+@Preview(showBackground = true)
+@Composable
+fun MovieListAndContentPreview() {
+    MyMovieAppTheme {
+        MovieApp(windowSize = WindowWidthSizeClass.Expanded)
+    }
+}
