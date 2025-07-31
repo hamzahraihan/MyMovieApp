@@ -1,5 +1,6 @@
 package com.example.mymovieapp.ui
 
+import androidx.activity.compose.BackHandler
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
@@ -54,6 +55,10 @@ fun MovieDetailScreen(
     modifier: Modifier = Modifier,
     onBackPressed: () -> Unit
 ) {
+    BackHandler {
+        onBackPressed()
+    }
+
     val selectedMovie = movieUiState.currentSelectedMovie
     Box(modifier = modifier) {
         LazyColumn(
@@ -63,14 +68,17 @@ fun MovieDetailScreen(
         ) {
             item {
                 Box {
-                    MovieDetailScreenImage(modifier = Modifier, selectedMovie.imageRes)
+                    MovieDetailScreenImage(imageRes = selectedMovie.imageRes)
                     Column(
                         modifier = Modifier
                             .padding(16.dp)
                             .matchParentSize(),
                         verticalArrangement = Arrangement.SpaceBetween
                     ) {
-                        MovieDetailScreenTopAppBar()
+                        MovieDetailScreenTopAppBar(
+                            modifier = Modifier.padding(top = 16.dp),
+                            onBackPressed = onBackPressed
+                        )
                         Spacer(modifier = Modifier.weight(2f))
                         Column(
                             modifier = Modifier.fillMaxWidth(),
@@ -98,6 +106,7 @@ fun MovieDetailScreenImage(modifier: Modifier = Modifier, @DrawableRes imageRes:
         contentDescription = null,
         contentScale = ContentScale.Crop,
         modifier = Modifier
+            .fillMaxWidth()
             .height(400.dp)
             .graphicsLayer {
                 compositingStrategy = CompositingStrategy.Offscreen
@@ -137,16 +146,18 @@ fun MovieDetailScreenDescription(modifier: Modifier = Modifier, @StringRes descr
 }
 
 @Composable
-fun MovieDetailScreenTopAppBar() {
+fun MovieDetailScreenTopAppBar(modifier: Modifier = Modifier, onBackPressed: () -> Unit) {
     IconButton(
-        onClick = {},
-        modifier = Modifier.background(
-            color = MaterialTheme.colorScheme.onSurface,
-            shape = CircleShape
-        ),
+        onClick = onBackPressed,
+        modifier = modifier
+            .background(
+                color = MaterialTheme.colorScheme.inverseOnSurface,
+                shape = CircleShape
+            )
     ) {
         Icon(
             imageVector = Icons.AutoMirrored.Filled.KeyboardArrowLeft,
+            tint = MaterialTheme.colorScheme.onSurface,
             contentDescription = null
         )
     }
