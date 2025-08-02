@@ -24,6 +24,8 @@ import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationDrawerItem
 import androidx.compose.material3.NavigationDrawerItemDefaults
+import androidx.compose.material3.NavigationRail
+import androidx.compose.material3.NavigationRailItem
 import androidx.compose.material3.PermanentDrawerSheet
 import androidx.compose.material3.PermanentNavigationDrawer
 import androidx.compose.material3.Text
@@ -32,7 +34,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.example.mymovieapp.data.Movie
 import com.example.mymovieapp.data.MovieType
@@ -74,10 +75,11 @@ fun MovieHomeScreen(
     )
     if (navigationType == MovieNavigationType.PERMANENT_NAVIGATION_DRAWER) {
         PermanentNavigationDrawer(
+            modifier = modifier,
             drawerContent = {
                 PermanentDrawerSheet(
                     modifier = Modifier.width(240.dp),
-                    drawerContentColor = MaterialTheme.colorScheme.inverseOnSurface
+                    drawerContainerColor = MaterialTheme.colorScheme.inverseOnSurface
                 ) {
                     NavigationDrawerContent(
                         selectedDestination = movieUiState.currentMovieType,
@@ -86,7 +88,6 @@ fun MovieHomeScreen(
                         modifier = Modifier
                             .wrapContentWidth()
                             .fillMaxHeight()
-                            .background(MaterialTheme.colorScheme.inverseOnSurface)
                             .padding(12.dp)
                     )
                 }
@@ -117,6 +118,8 @@ fun MovieHomeScreen(
             MovieDetailScreen(
                 onBackPressed = onDetailScreenBackPressed,
                 movieUiState = movieUiState,
+                modifier = modifier,
+                isFullscreen = true
             )
         }
     }
@@ -132,11 +135,17 @@ private fun MovieAppContent(
     navigationItemContentList: List<NavigationItemContent>,
     modifier: Modifier = Modifier
 ) {
-    val movies = movieUiState.currentTypeOfMovies
     Box(
         modifier = modifier
     ) {
         Row(modifier = Modifier.fillMaxSize()) {
+            AnimatedVisibility(visible = navigationType == MovieNavigationType.NAVIGATION_RAIL) {
+                MovieNavigationRail(
+                    currentTab = movieUiState.currentMovieType,
+                    onTabPressed = onTabPressed,
+                    navigationItemContentList = navigationItemContentList
+                )
+            }
             Column(
                 modifier = Modifier
                     .fillMaxSize()
@@ -149,7 +158,7 @@ private fun MovieAppContent(
                         onMovieCardPressed = onMovieCardPressed,
                         modifier = Modifier
                             .statusBarsPadding()
-                            .weight(2f)
+                            .weight(1f)
                     )
                 } else {
                     MovieList(
@@ -174,13 +183,39 @@ private fun MovieAppContent(
 }
 
 @Composable
+private fun MovieNavigationRail(
+    currentTab: MovieType,
+    onTabPressed: (MovieType) -> Unit,
+    navigationItemContentList: List<NavigationItemContent>,
+    modifier: Modifier = Modifier
+) {
+    NavigationRail(modifier = modifier) {
+        for (navItem in navigationItemContentList) {
+            NavigationRailItem(
+                selected = currentTab == navItem.movieType,
+                onClick = {
+                    onTabPressed(navItem.movieType)
+                },
+                icon = { Icon(imageVector = navItem.icon, contentDescription = navItem.text) },
+            )
+        }
+    }
+
+}
+
+@Composable
 private fun NavigationDrawerContent(
     selectedDestination: MovieType,
     onTabPressed: (MovieType) -> Unit,
     navigationItemContentList: List<NavigationItemContent>,
-    modifier: Modifier
+    modifier: Modifier = Modifier
 ) {
     Column(modifier = modifier) {
+        NavigationDrawerHeader(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(12.dp)
+        )
         for (navItem in navigationItemContentList) {
             NavigationDrawerItem(
                 selected = selectedDestination == navItem.movieType,
@@ -205,6 +240,15 @@ private fun NavigationDrawerContent(
     }
 }
 
+@Composable
+private fun NavigationDrawerHeader(modifier: Modifier = Modifier) {
+    Row(
+        modifier = modifier
+    ) {
+        Text(text = "Movie List App", style = MaterialTheme.typography.titleMedium)
+    }
+
+}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
