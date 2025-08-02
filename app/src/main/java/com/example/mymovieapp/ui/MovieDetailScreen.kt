@@ -79,7 +79,7 @@ fun MovieDetailScreen(
                             modifier = Modifier.padding(top = 16.dp),
                             onBackPressed = onBackPressed
                         )
-                        Spacer(modifier = Modifier.weight(2f))
+                        Spacer(modifier = Modifier.weight(1f))
                         Column(
                             modifier = Modifier.fillMaxWidth(),
                             horizontalAlignment = Alignment.CenterHorizontally,
@@ -140,7 +140,7 @@ fun MovieDetailScreenDescription(modifier: Modifier = Modifier, @StringRes descr
     Text(
         text = stringResource(descriptionRes),
         style = MaterialTheme.typography.bodyMedium,
-        color = Color.White,
+        color = MaterialTheme.colorScheme.primary,
         modifier = modifier
     )
 }
