@@ -29,6 +29,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -64,11 +65,23 @@ fun MovieList(
             MovieAppBar(movieUiState)
         }
         items(movies) { movie ->
-            MovieListItem(
-                movie = movie,
-                selected = false,
-                onCardClick = { onMovieCardPressed(movie) },
-            )
+            if (movies.isEmpty()) {
+                Box(
+                    modifier = Modifier,
+                    contentAlignment = Alignment.Center,
+                ) {
+                    Text(
+                        text = "there is no movies available",
+                        textAlign = TextAlign.Center
+                    )
+                }
+            } else {
+                MovieListItem(
+                    movie = movie,
+                    selected = false,
+                    onCardClick = { onMovieCardPressed(movie) },
+                )
+            }
         }
     }
 }
@@ -82,7 +95,11 @@ fun MovieListAndDetail(
     val movies = movieUiState.currentTypeOfMovies
     Row(modifier = modifier, horizontalArrangement = Arrangement.SpaceEvenly) {
         LazyColumn(
-            contentPadding = WindowInsets.statusBars.asPaddingValues()
+            contentPadding = WindowInsets.statusBars.asPaddingValues(),
+            modifier = Modifier
+                .weight(1f)
+                .padding(horizontal = 16.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             items(movies, key = { movie ->
                 movie.id
@@ -99,7 +116,10 @@ fun MovieListAndDetail(
             movieUiState = movieUiState,
             onBackPressed = {
                 activity?.finish()
-            }
+            },
+            modifier = Modifier
+                .weight(1f)
+                .padding(end = 16.dp)
         )
     }
 }
