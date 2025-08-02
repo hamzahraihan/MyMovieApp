@@ -73,7 +73,7 @@ fun MovieListPreview() {
     }
 }
 
-@Preview(showBackground = true)
+@Preview(showBackground = true, widthDp = 1000)
 @Composable
 fun MovieListAndContentPreview() {
     MyMovieAppTheme {
