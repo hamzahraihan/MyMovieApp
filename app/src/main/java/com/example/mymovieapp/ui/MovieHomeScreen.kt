@@ -9,6 +9,8 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.DateRange
@@ -73,7 +75,10 @@ fun MovieHomeScreen(
     if (navigationType == MovieNavigationType.PERMANENT_NAVIGATION_DRAWER) {
         PermanentNavigationDrawer(
             drawerContent = {
-                PermanentDrawerSheet {
+                PermanentDrawerSheet(
+                    modifier = Modifier.width(240.dp),
+                    drawerContentColor = MaterialTheme.colorScheme.inverseOnSurface
+                ) {
                     NavigationDrawerContent(
                         selectedDestination = movieUiState.currentMovieType,
                         onTabPressed = onTabPressed,
@@ -81,6 +86,8 @@ fun MovieHomeScreen(
                         modifier = Modifier
                             .wrapContentWidth()
                             .fillMaxHeight()
+                            .background(MaterialTheme.colorScheme.inverseOnSurface)
+                            .padding(12.dp)
                     )
                 }
             },
@@ -136,7 +143,15 @@ private fun MovieAppContent(
                     .background(MaterialTheme.colorScheme.inverseOnSurface),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                if (movies.isNotEmpty()) {
+                if (contentType == MovieContentType.LIST_AND_DETAIL) {
+                    MovieListAndDetail(
+                        movieUiState = movieUiState,
+                        onMovieCardPressed = onMovieCardPressed,
+                        modifier = Modifier
+                            .statusBarsPadding()
+                            .weight(2f)
+                    )
+                } else {
                     MovieList(
                         movieUiState = movieUiState,
                         modifier = Modifier
@@ -144,17 +159,6 @@ private fun MovieAppContent(
                             .padding(horizontal = 16.dp),
                         onMovieCardPressed = onMovieCardPressed,
                     )
-                }
-                if (movies.isEmpty()) {
-                    Box(
-                        modifier = Modifier.weight(1f),
-                        contentAlignment = Alignment.Center,
-                    ) {
-                        Text(
-                            text = "there is no movies available",
-                            textAlign = TextAlign.Center
-                        )
-                    }
                 }
                 AnimatedVisibility(visible = navigationType == MovieNavigationType.BOTTOM_NAVIGATION) {
                     MovieNavigationBottomBar(
