@@ -53,7 +53,8 @@ import com.example.mymovieapp.ui.theme.MyMovieAppTheme
 fun MovieDetailScreen(
     movieUiState: MovieUiState,
     modifier: Modifier = Modifier,
-    onBackPressed: () -> Unit
+    onBackPressed: () -> Unit,
+    isFullscreen: Boolean = false
 ) {
     BackHandler {
         onBackPressed()
@@ -75,10 +76,12 @@ fun MovieDetailScreen(
                             .matchParentSize(),
                         verticalArrangement = Arrangement.SpaceBetween
                     ) {
-                        MovieDetailScreenTopAppBar(
-                            modifier = Modifier.padding(top = 16.dp),
-                            onBackPressed = onBackPressed
-                        )
+                        if (isFullscreen) {
+                            MovieDetailScreenTopAppBar(
+                                modifier = Modifier.padding(top = 16.dp),
+                                onBackPressed = onBackPressed
+                            )
+                        }
                         Spacer(modifier = Modifier.weight(1f))
                         Column(
                             modifier = Modifier.fillMaxWidth(),
